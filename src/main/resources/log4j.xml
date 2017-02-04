@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<appender name="LOG.Console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] [%p] %t %c - %m%n" />
+		</layout>
+	</appender>
+	
+	 
+	 <!-- 根日志 -->
+	<root>
+		<priority value="DEBUG" />
+		<!-- 关闭输出到日志，控制输出到Catalina.out的大小 -->
+		<appender-ref ref="LOG.Console" />
+	</root>
+
+</log4j:configuration>
