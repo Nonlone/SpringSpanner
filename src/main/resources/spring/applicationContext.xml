@@ -15,6 +15,8 @@
 	  http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
 	  http://www.springframework.org/schema/nutz
 	  http://www.springframework.org/schema/nutz-context.xsd ">
+	  
+	  <import resource="datasource-config.xml" />
 
 	<!-- 可通过注解控制事务 -->
 <!-- 	<tx:annotation-driven /> -->
