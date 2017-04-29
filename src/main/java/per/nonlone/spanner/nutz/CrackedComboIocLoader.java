@@ -71,11 +71,11 @@ public class CrackedComboIocLoader extends ComboIocLoader implements IocObjectGe
 						// 获取IocObject 的 Map
 						Map<String, IocObject> map = (Map<String, IocObject>) mapField.get(iocLoader);
 						if (null != map && !map.isEmpty()) {
-							for (IocObject iocObject : map.values()) {
-								if (!resultMap.containsKey(iocObject.getClass().getName())) {
-									resultMap.put(iocObject.getClass().getName(), iocObject);
+							for (Entry<String,IocObject> entry: map.entrySet()) {
+								if (!resultMap.containsKey(entry.getKey())) {
+									resultMap.put(entry.getKey(), entry.getValue());
 								} else {
-									logger.warn(String.format("Nut Found Duplicate beanName=%s, pls check you config!", iocObject.getClass().getName()));
+									logger.warn(String.format("Nut Found Duplicate beanName=%s, pls check you config!", entry.getValue().getType().getName()));
 								}
 							}
 						}
@@ -87,11 +87,11 @@ public class CrackedComboIocLoader extends ComboIocLoader implements IocObjectGe
 							for (Entry<String, Map<String, Object>> entry : map.entrySet()) {
 								tmpResultMap = createIocObjectMapFromMap(iocLoading, entry, map, tmpResultMap);
 							}
-							for(IocObject iocObject:tmpResultMap.values()){
-								if (!resultMap.containsKey(iocObject.getClass().getName())) {
-									resultMap.put(iocObject.getClass().getName(), iocObject);
+							for(Entry<String, IocObject> entry:tmpResultMap.entrySet()){
+								if (!resultMap.containsKey(entry.getKey())) {
+									resultMap.put(entry.getKey(),entry.getValue());
 								} else {
-									logger.warn(String.format("Nut Found Duplicate beanName=%s, pls check you config!", iocObject.getClass().getName()));
+									logger.warn(String.format("Nut Found Duplicate beanName=%s, pls check you config!", entry.getValue().getType().getName()));
 								}
 							}
 						}
