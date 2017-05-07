@@ -1,5 +1,9 @@
 package per.nonlone.spanner.simple.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomUtils;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -14,6 +18,10 @@ public class TestModelDao {
 
     @Inject
     private Dao dao;
+    
+    public interface RandomInterruptable{
+        void interrupt();
+    }
 
     public TestModel insert(TestModel testModel) {
         return dao.insert(testModel);
@@ -21,6 +29,34 @@ public class TestModelDao {
 
     public Integer delete(TestModel testModel){
         return  dao.delete(testModel);
+    }
+    
+    public List<TestModel>  insertTestModel(String... values){
+        return doInsertTestModel(null,values);
+    }
+
+    public List<TestModel> insertTestModelInterrupted(String... values){
+        return doInsertTestModel(new RandomInterruptable() {
+            public void interrupt() {
+                throw new RuntimeException("Interrupted Transcation");
+            }
+        },values);
+    }
+
+    private List<TestModel> doInsertTestModel(final RandomInterruptable randomInterruptable, String... values){
+        int size = values.length;
+        int randomSize = RandomUtils.nextInt(0,size);
+        final List<TestModel> result = new ArrayList<TestModel>();
+        for(int i=0;i<values.length;i++){
+            String value = values[i];
+            TestModel testModel = new TestModel();
+            testModel.setValue(value);
+            result.add(insert(testModel));
+            if(randomInterruptable!=null&&i==randomSize){
+                randomInterruptable.interrupt();
+            }
+        }
+        return result;
     }
 
 }

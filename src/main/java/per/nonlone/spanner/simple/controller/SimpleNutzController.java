@@ -1,7 +1,6 @@
 package per.nonlone.spanner.simple.controller;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -39,23 +38,44 @@ public class SimpleNutzController {
 	@At("/nutz/insert")
 	@Ok("Json")
 	public Object insert(){
-		String[] values = new String[]{
-				RandomStringUtils.randomAlphanumeric(4),
-				RandomStringUtils.randomAlphanumeric(4),
-				RandomStringUtils.randomAlphanumeric(4),
-				RandomStringUtils.randomAlphanumeric(4),
-				RandomStringUtils.randomAlphanumeric(4),
-				RandomStringUtils.randomAlphanumeric(4),
-				RandomStringUtils.randomAlphanumeric(4)
-		};
-		return simpleNutzService.insertTestModel(values);
+		return simpleNutzService.insertTestModel(getValues());
 	}
 
-
+	
 	@At("/nutz/insert2")
 	@Ok("Json")
 	public Object insert2(){
-		String[] values = new String[]{
+		return simpleNutzService.insertTestModelInterrupted(getValues());
+	}
+	
+	@At("/nutz/insertspring")
+	@Ok("Json")
+	public Object insertSpring(){
+		return simpleSpringService.insertTestModel(getValues());
+	}
+	
+	@At("/nutz/insertspring2")
+	@Ok("Json")
+	public Object insertSpring2(){
+		return simpleSpringService.insertTestModelInterrupted(getValues());
+	}
+	
+	@At("/nutz/insertnutzspring")
+	@Ok("Json")
+	public Object insertNutzSpring(){
+		return simpleNutzService.springInsertTestModel(getValues());
+	}
+
+	
+	@At("/nutz/insertnutzspring2")
+	@Ok("Json")
+	public Object insertNutzSpring2(){
+		return simpleNutzService.springInsertTestModelInterrupted(getValues());
+	}
+	
+	
+	private String[] getValues(){
+		return new String[]{
 				RandomStringUtils.randomAlphanumeric(4),
 				RandomStringUtils.randomAlphanumeric(4),
 				RandomStringUtils.randomAlphanumeric(4),
@@ -63,6 +83,5 @@ public class SimpleNutzController {
 				RandomStringUtils.randomAlphanumeric(4),
 				RandomStringUtils.randomAlphanumeric(4)
 		};
-		return simpleNutzService.insertTestModelInterrupted(values);
 	}
 }
