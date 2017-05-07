@@ -19,7 +19,7 @@
 	  <import resource="datasource-config.xml" />
 
 	<!-- 可通过注解控制事务 -->
-<!-- 	<tx:annotation-driven /> -->
+	<tx:annotation-driven />
 	
 	<context:annotation-config/>
 	<!-- Spring 包扫描 -->
