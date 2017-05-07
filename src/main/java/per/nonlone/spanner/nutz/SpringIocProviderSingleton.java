@@ -30,10 +30,7 @@ public class SpringIocProviderSingleton
     private ApplicationContext applicationContext;
 
     // 屏蔽默认构造器
-    private SpringIocProviderSingleton() {
-    }
-
-    ;
+    private SpringIocProviderSingleton() {}
 
     // 单例模式，静态内部类
     private static class SpringIocProviderSingletonHolder {
