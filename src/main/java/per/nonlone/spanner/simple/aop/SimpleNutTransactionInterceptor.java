@@ -7,20 +7,15 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
+import per.nonlone.spanner.simple.exception.AbortTransactionException;
+
 /**
  * Created by Thunderbird on 5/5/2017.
  */
 @IocBean
-public class SimpleNutTranscationInterceptor implements MethodInterceptor{
+public class SimpleNutTransactionInterceptor implements MethodInterceptor{
 
-    private final static Logger logger = Logger.getLogger(SimpleNutTranscationInterceptor.class);
-
-    public class AbortTranscationException extends RuntimeException{
-
-        public AbortTranscationException(Throwable throwable){
-            super(throwable);
-        }
-    }
+    private final static Logger logger = Logger.getLogger(SimpleNutTransactionInterceptor.class);
 
     public void filter(InterceptorChain chain) throws Throwable {
         final InterceptorChain transChain = chain;
@@ -30,7 +25,7 @@ public class SimpleNutTranscationInterceptor implements MethodInterceptor{
                     transChain.doChain();
                 } catch (Throwable throwable) {
                     logger.error(throwable);
-                    throw new AbortTranscationException(throwable);
+                    throw new AbortTransactionException(throwable);
                 }
             }
         });
