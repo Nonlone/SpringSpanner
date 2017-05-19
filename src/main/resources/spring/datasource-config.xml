@@ -7,7 +7,7 @@
 	  
 	  	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<!-- 基本属性 url、user、password -->
-		<property name="url" value="jdbc:mysql://localhost:3306/test" />
+		<property name="url" value="jdbc:mysql://localhost:3307/test" />
 		<property name="username" value="root" />
 		<property name="password" value="123456" />
 		<!-- 配置初始化大小、最小、最大 -->
@@ -39,12 +39,18 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
+	<bean id="nutzDataSource" class="per.nonlone.spanner.nutz.NutzTransDataSource">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 	<bean id="transactionTemplate" 	class="org.springframework.transaction.support.TransactionTemplate">
 		<property name="transactionManager" ref="transactionManager" />
 	</bean>
 	
 	<bean id="dao" class="org.nutz.dao.impl.NutDao">
 		<property name="dataSource" ref="dataSource" />
+		 <property name="runner" ref="springDaoRunner"/>
 	</bean>
+	<bean id="springDaoRunner" class="org.nutz.integration.spring.SpringDaoRunner" />
 	
 </beans>
