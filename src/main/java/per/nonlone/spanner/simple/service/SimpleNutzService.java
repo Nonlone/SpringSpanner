@@ -1,5 +1,6 @@
 package per.nonlone.spanner.simple.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.nutz.ioc.aop.Aop;
@@ -17,6 +18,9 @@ public class SimpleNutzService {
 
     @Inject
     private TestModelDao testModelDao;
+    
+    @Inject
+    private SimpleSpringService simpleSpringService;
 
 
     @Aop({"simpleInterceptor", "simpleSpringInterceptor"})
@@ -42,5 +46,13 @@ public class SimpleNutzService {
     @Aop("simpleSpringTransactionInterceptor")
     public List<TestModel> springInsertTestModelInterrupted(String... values){
         return testModelDao.insertTestModelInterrupted(values);
+    }
+    
+    @Aop("simpleSpringTransactionInterceptor")
+    public List<TestModel> springInsertTestModelWithPropagation(String... values){
+        List<TestModel> resultList = new ArrayList<TestModel>();
+        resultList.addAll(simpleSpringService.insertTestModelWithPropagation(values));
+        resultList.addAll(simpleSpringService.insertTestModelInterruptedWithPropagation(values));
+        return resultList;
     }
 }
