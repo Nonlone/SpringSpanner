@@ -46,13 +46,16 @@ public class TestModelDao {
     private List<TestModel> doInsertTestModel(final RandomInterruptable randomInterruptable, String... values){
         int size = values.length;
         int randomSize = RandomUtils.nextInt(0,size);
+        boolean interruptuedFlag = false;
+        if(randomInterruptable!=null)
+            interruptuedFlag = true;
         final List<TestModel> result = new ArrayList<TestModel>();
-        for(int i=0;i<values.length;i++){
+        for (int i = 0; i < values.length; i++) {
             String value = values[i];
             TestModel testModel = new TestModel();
             testModel.setValue(value);
             result.add(insert(testModel));
-            if(randomInterruptable!=null&&i==randomSize){
+            if (interruptuedFlag && i == randomSize) {
                 randomInterruptable.interrupt();
             }
         }
