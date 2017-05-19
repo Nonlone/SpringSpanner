@@ -12,9 +12,7 @@
 	  http://www.springframework.org/schema/tx 
 	  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 	  http://www.springframework.org/schema/hadoop 
-	  http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
-	  http://www.springframework.org/schema/nutz
-	  http://www.springframework.org/schema/nutz-context.xsd ">
+	  http://www.springframework.org/schema/hadoop/spring-hadoop.xsd">
 	  
 	  <import resource="datasource-config.xml" />
 
