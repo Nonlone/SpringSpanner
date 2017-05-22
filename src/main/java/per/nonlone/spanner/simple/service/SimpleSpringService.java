@@ -3,9 +3,6 @@ package per.nonlone.spanner.simple.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.nutz.ioc.aop.Aop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -43,21 +40,43 @@ public class SimpleSpringService {
         return testModelDao.insertTestModelInterrupted(values);
     }
     
-    @Transactional(propagation=Propagation.REQUIRES_NEW )
     public List<TestModel>  insertTestModelWithPropagation (String... values){
-        return testModelDao.insertTestModel(values);
+        return simpleSpringSubService.insertTestModelWithPropagation(values);
     }
 
-    @Transactional(propagation=Propagation.REQUIRES_NEW )
     public List<TestModel> insertTestModelInterruptedWithPropagation(String... values){
-        return testModelDao.insertTestModelInterrupted(values);
+        return simpleSpringSubService.insertTestModelInterruptedWithPropagation(values);
     }
     
     @Transactional
     public List<TestModel> insertTestModelAllWithPropagation(String... values){
         List<TestModel> resultList = new ArrayList<TestModel>();
-        resultList.addAll(insertTestModelWithPropagation(values));
-        resultList.addAll(insertTestModelInterruptedWithPropagation(values));
+        resultList.addAll(simpleSpringSubService.insertTestModelWithPropagation(values));
+        testModelDao.insertTestModelInterrupted(values);
+        resultList.addAll(simpleSpringSubService.insertTestModelInterruptedWithPropagation(values));
         return resultList;
+    }
+    
+    @Transactional(propagation=Propagation.REQUIRES_NEW )
+    public List<TestModel>  insertTestModelThisWithPropagation (String... values){
+        return testModelDao.insertTestModel(values);
+    }
+
+    @Transactional(propagation=Propagation.REQUIRES_NEW )
+    public List<TestModel> insertTestModelInterruptedThisWithPropagation(String... values){
+        return testModelDao.insertTestModelInterrupted(values);
+    }
+    
+    
+    @Transactional
+    public List<TestModel> insertTestModelThisAllWithPropagation(String... values){
+        List<TestModel> resultList = new ArrayList<TestModel>();
+        resultList.addAll(insertTestModelThisWithPropagation(values));
+        resultList.addAll(insertTestModelInterruptedThisWithPropagation(values));
+        return resultList;
+    }
+    
+    public List<TestModel> insertTestModelAllWithPropagationSameClassJump(String... values){
+        return insertTestModelAllWithPropagation(values);
     }
 }

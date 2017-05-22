@@ -48,7 +48,8 @@ public class SimpleSpringController {
 		};
     }
 	
-	@RequestMapping("/spring/indexList")
+	@SuppressWarnings("serial")
+    @RequestMapping("/spring/indexList")
 	@ResponseBody
 	public List<String> indexList(){
 		return new ArrayList<String>(){{
@@ -87,6 +88,18 @@ public class SimpleSpringController {
     @ResponseBody
     public Object insertAllWithPropagation(){
         return simpleSpringService.insertTestModelAllWithPropagation(getValues());
+    }
+	
+	@RequestMapping("/spring/insertThisAllWithPropagation")
+    @ResponseBody
+    public Object insertThisAllWithPropagation(){
+        return simpleSpringService.insertTestModelThisAllWithPropagation(getValues());
+    }
+	
+	@RequestMapping("/spring/insertThisAllWithPropagationSameClassJump")
+    @ResponseBody
+    public Object insertThisAllWithPropagatioJump(){
+        return simpleSpringService.insertTestModelAllWithPropagationSameClassJump(getValues());
     }
 	
 	private String[] getValues(){
