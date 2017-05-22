@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-
 import per.nonlone.spanner.simple.service.SimpleNutzService;
 import per.nonlone.spanner.simple.service.SimpleSpringService;
 
@@ -63,67 +61,42 @@ public class SimpleSpringController {
 	
 	@RequestMapping("/spring/insert")
     @ResponseBody
-    public String insert(){
-        return JSON.toJSONString(simpleSpringService.insertTestModel(new String[]{
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4)
-        }));
+    public Object insert(){
+        return simpleSpringService.insertTestModel(getValues());
     }
 	
 	@RequestMapping("/spring/insert2")
     @ResponseBody
     public Object insert2(){
-        return simpleSpringService.insertTestModelInterrupted(new String[]{
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4)
-        });
+        return simpleSpringService.insertTestModelInterrupted(getValues());
     }
 	
 	@RequestMapping("/spring/insertWithPropagation")
     @ResponseBody
     public Object insertWithPropagation(){
-        return simpleSpringService.insertTestModelWithPropagation(new String[]{
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),	
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4)
-        });
+        return simpleSpringService.insertTestModelWithPropagation(getValues());
     }
     
     @RequestMapping("/spring/insertWithPropagation2")
     @ResponseBody
     public Object insertWithPropagation2(){
-        return simpleSpringService.insertTestModelInterruptedWithPropagation(new String[]{
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4),
-                RandomStringUtils.randomAlphanumeric(4)
-        });
+        return simpleSpringService.insertTestModelInterruptedWithPropagation(getValues());
     }
 	
 	@RequestMapping("/spring/insertAllWithPropagation")
     @ResponseBody
     public Object insertAllWithPropagation(){
-        return simpleSpringService.insertTestModelAllWithPropagation(new String[]{
+        return simpleSpringService.insertTestModelAllWithPropagation(getValues());
+    }
+	
+	private String[] getValues(){
+	    return new String[]{
                 RandomStringUtils.randomAlphanumeric(4),
                 RandomStringUtils.randomAlphanumeric(4),
                 RandomStringUtils.randomAlphanumeric(4),
                 RandomStringUtils.randomAlphanumeric(4),
                 RandomStringUtils.randomAlphanumeric(4),
                 RandomStringUtils.randomAlphanumeric(4)
-        });
-    }
-
+	    };
+	}
 }
