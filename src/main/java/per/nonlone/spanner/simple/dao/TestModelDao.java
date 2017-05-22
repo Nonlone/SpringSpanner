@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.log4j.Logger;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -13,6 +14,7 @@ import per.nonlone.spanner.simple.model.TestModel;
 @IocBean
 public class TestModelDao {
 
+    private static final Logger logger = Logger.getLogger(TestModelDao.class);
 
     private Class<?> entityClass = TestModel.class;
 
@@ -56,6 +58,7 @@ public class TestModelDao {
             testModel.setValue(value);
             result.add(insert(testModel));
             if (interruptuedFlag && i == randomSize) {
+                logger.info(String.format("start interrupt excepiton randomSize<%d>",randomSize));
                 randomInterruptable.interrupt();
             }
         }
