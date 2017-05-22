@@ -9,8 +9,11 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
 
-	<!-- 启动Spring自动扫描功能，自动扫描所有注解该路径 -->
-	<context:component-scan base-package="per.nonlone.spanner.simple" />
+	<!-- 启动Spring自动扫描功能，自动扫描所有注解该路径，只扫描Controller注释类 -->
+	<context:component-scan base-package="per.nonlone.spanner.simple" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
 	<!-- SpringMVC 注解自动映射，完成请求和注解POJO的映射 -->
 	<mvc:annotation-driven />
 	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->

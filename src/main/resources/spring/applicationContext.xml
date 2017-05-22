@@ -16,11 +16,13 @@
 	  
 	  <import resource="datasource-config.xml" />
 
-	<!-- 可通过注解控制事务 -->
-	<tx:annotation-driven />
-	
 	<context:annotation-config/>
-	<!-- Spring 包扫描 -->
-	<context:component-scan base-package="per.nonlone.spanner" />
-			
+	<!-- Spring 包扫描 排除Controller注解，Controller在SpringServlet扫描-->
+	<context:component-scan base-package="per.nonlone.spanner" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!-- 可通过注解控制事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
 </beans>
