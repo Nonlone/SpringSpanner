@@ -79,6 +79,12 @@ public class SimpleNutzController {
         return simpleNutzService.springInsertTestModelWithPropagation(getValues());
     }
 	
+	@At("/nutz/insertnutzspringwithpropagation2")
+    @Ok("Json")
+	public Object insertNutzSpringWithPropagation2(){
+	    return simpleSpringService.insertTestModelAllWithPropagation(getValues());
+	}
+	
 	private String[] getValues(){
 		return new String[]{
 				RandomStringUtils.randomAlphanumeric(4),
