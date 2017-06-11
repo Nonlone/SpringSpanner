@@ -26,6 +26,7 @@
 		<mybatis.version>3.2.7</mybatis.version>
 		<druid.version>1.0.29</druid.version>
 		<jackson.version>2.7.0</jackson.version>
+		<fastjson.version>1.2.31</fastjson.version>
 	</properties>
 	
 	<dependencies>
@@ -150,8 +151,16 @@
 		<dependency>
 		    <groupId>com.alibaba</groupId>
 		    <artifactId>fastjson</artifactId>
-		    <version>1.2.31</version>
+		    <version>${fastjson.version}</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javassist/javassist -->
+		<dependency>
+		    <groupId>javassist</groupId>
+		    <artifactId>javassist</artifactId>
+		    <version>3.12.1.GA</version>
+		</dependency>
+		
 		
 		
 	</dependencies>
