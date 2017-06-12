@@ -4,7 +4,6 @@ import java.lang.reflect.Modifier;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.nutz.lang.Lang;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.util.Assert;
@@ -37,31 +36,17 @@ public class JavassistAopProxy implements AopProxy{
     
     @Override
     public Object getProxy() {
-        // TODO Auto-generated method stub
-        return null;
+        return getProxy(null);
     }
 
     @Override
     public Object getProxy(ClassLoader classLoader) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Creating ASM proxy: target source is " + this.advised.getTargetSource());
-        }
-
+        Class<?> clazz = getProxyClass(classLoader,this.advised.getTargetClass());
         try {
-            Class<?> rootClass = this.advised.getTargetClass();
-            Assert.state(rootClass != null, "Target class must be available for creating a CGLIB proxy");
-            Class<?> proxySuperClass = rootClass;
-            if (isAopProxyClass(rootClass)) {
-                proxySuperClass = rootClass.getSuperclass();
-                Class<?>[] additionalInterfaces = rootClass.getInterfaces();
-                for (Class<?> additionalInterface : additionalInterfaces) {
-                    this.advised.addInterface(additionalInterface);
-                }
-            }
-        }catch (Exception e) {
-            // TODO: handle exception
+            return clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new CreateAopProxyException(String.format("New Instance for Class %s", clazz.getName()), e);
         }
-        return null;
     }
     
     /**
@@ -69,9 +54,9 @@ public class JavassistAopProxy implements AopProxy{
      * @param clazz
      * @return
      */
-    private <T> Class<T> buildAopProxyClass(Class<T> clazz){
+    private Class<?> getProxyClass(ClassLoader classLoader,Class<?> clazz){
         Class<?> rootClass = this.advised.getTargetClass();
-        Assert.state(rootClass != null, "Target class must be available for creating a ASM proxy");
+        Assert.state(rootClass != null, String.format("Target Class %s must be available for creating a ASM proxy",clazz.getName()));
         //判断是否为代理类
         if (isAopProxyClass(clazz))
             return clazz;
@@ -80,14 +65,14 @@ public class JavassistAopProxy implements AopProxy{
             return clazz;
         //尝试获取代理类
         String proxyClassName = clazz.getName() + CLASSNAME_SUFFIX;
-        Class<T> proxyClass = tryLoadClass(proxyClassName);
+        Class<?> proxyClass = tryLoadClass(classLoader,proxyClassName);
         if (proxyClass != null)
             return proxyClass;
         //代理类不存在，创建代理类
-        return createAsmAopProxyClass(clazz);
+        return createJasistAopProxyClass(classLoader,clazz);
     }
     
-    private <T> Class<T> createAsmAopProxyClass(Class<T> clazz){
+    private Class<?> createJasistAopProxyClass(ClassLoader classLoader,Class<?> clazz){
         CtClass targetCtClass = null;
         try{
             if(clazz!=null)
@@ -137,25 +122,30 @@ public class JavassistAopProxy implements AopProxy{
     }
     
     @SuppressWarnings("unchecked")
-    protected <T> Class<T> tryLoadClass(String className) {
+    protected Class<?> tryLoadClass(ClassLoader classLoader,String className) {
+        if(classLoader!=null){
+            try {
+                return (Class<?>) Class.forName(className, false, classLoader);
+            } catch (ClassNotFoundException e) {
+                try {
+                    return (Class<?>) classLoader.loadClass(className);
+                }
+                catch (ClassNotFoundException e1) {}
+            }
+        }
         try {
-            return (Class<T>) Thread.currentThread().getContextClassLoader().loadClass(className);
+            return (Class<?>) Thread.currentThread().getContextClassLoader().loadClass(className);
         }
         catch (ClassNotFoundException e) {
-            ClassLoader classLoader = getClass().getClassLoader();
+            classLoader = getClass().getClassLoader();
             try {
-                return (Class<T>) Class.forName(className, false, classLoader);
+                return (Class<?>) Class.forName(className, false, classLoader);
             }
             catch (ClassNotFoundException e2) {
                 try {
-                    return (Class<T>) Lang.loadClass(className);
+                    return (Class<?>) classLoader.loadClass(className);
                 }
-                catch (ClassNotFoundException e1) {
-                    try {
-                        return (Class<T>) classLoader.loadClass(className);
-                    }
-                    catch (ClassNotFoundException e3) {}
-                }
+                catch (ClassNotFoundException e3) {}
             }
         }
         return null;
