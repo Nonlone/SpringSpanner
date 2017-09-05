@@ -160,9 +160,15 @@
 		    <artifactId>javassist</artifactId>
 		    <version>3.12.1.GA</version>
 		</dependency>
-		
-		
-		
+
+		<!-- ByteBuddy -->
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>1.7.1</version>
+		</dependency>
+
+
 	</dependencies>
 
 
