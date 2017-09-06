@@ -8,10 +8,14 @@ public class Target {
 
     public void methodA(){
         System.out.println("This is a public method A");
+        methodE();
+        methodF();
     }
 
     protected void methodB(){
         System.out.println("this is protected method B");
+        methodE();
+        methodF();
     }
 
     private void methodC(){
@@ -21,4 +25,13 @@ public class Target {
     public static void methodD(){
         System.out.println("this is static method D");
     }
+
+    public void methodE(){
+        System.out.println("This is a public method E call by inner method");
+    }
+
+    protected void methodF(){
+        System.out.println("This is a protected method F call by inner method");
+    }
+
 }
