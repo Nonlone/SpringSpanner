@@ -2,12 +2,20 @@ package per.nonlone.spanner.aop;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.NotFoundException;
 
 public class JavassistTestMain {
 
-    public static void main(String[] args) throws NotFoundException {
+    public static void main(String[] args) throws Exception {
         ClassPool pool = ClassPool.getDefault();
-        CtClass cc = pool.get(Target.class.getName());
+        CtClass ccTarget = pool.get(Target.class.getName());
+        CtClass ccProxy = pool.makeClass(Target.class.getName()+"$$JAVSSIT",ccTarget);
+
+
+        Class<?> clazz = ccProxy.toClass();
+        Target target = (Target)clazz.newInstance();
+
+        target.methodA();
+        target.methodB();
+        Target.methodD();
     }
 }
