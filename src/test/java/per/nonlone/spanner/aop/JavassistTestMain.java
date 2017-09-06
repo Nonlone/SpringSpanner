@@ -1,6 +1,9 @@
 package per.nonlone.spanner.aop;
 
-import javassist.*;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
 
 public class JavassistTestMain {
 
@@ -27,7 +30,15 @@ public class JavassistTestMain {
         //装载类
 //        ccTarget.toClass(Target.class.getClassLoader());
 
+        CtMethod[] targetMethods = ccTarget.getDeclaredMethods();
+        for(CtMethod targetMethod:targetMethods){
+            CtMethod newProxyMethod = CtNewMethod.copy(targetMethod,ccProxy,null);
+            newProxyMethod.insertBefore(String.format("  System.out.println(\"%s Call\"); ",targetMethod.getName()));
+            ccProxy.addMethod(newProxyMethod);
+        }
+
         Class<?> clazz = ccProxy.toClass();
+        System.out.println(clazz.getName());
         Target target = (Target)clazz.newInstance();
 
         target.methodA();
