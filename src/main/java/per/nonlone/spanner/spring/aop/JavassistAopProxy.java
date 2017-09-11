@@ -2,17 +2,13 @@ package per.nonlone.spanner.spring.aop;
 
 import java.lang.reflect.Modifier;
 
+import javassist.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.util.Assert;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtField;
-import javassist.CtMethod;
-import javassist.NotFoundException;
 import per.nonlone.spanner.spring.exception.CreateAopProxyException;
 
 public class JavassistAopProxy implements AopProxy{
@@ -73,21 +69,27 @@ public class JavassistAopProxy implements AopProxy{
     }
     
     private Class<?> createJasistAopProxyClass(ClassLoader classLoader,Class<?> clazz){
-        CtClass targetCtClass = null;
+        CtClass targetClass = null;
         try{
             if(clazz!=null)
-                targetCtClass = CLASS_POOL.get(clazz.getName());
+                targetClass = CLASS_POOL.get(clazz.getName());
         }catch (NotFoundException e) {
             logger.error(String.format("%s can not found by Javassist", clazz.getName()));
             return clazz;
         }
         //确认入参和Javassist获取到被代理的类
-        if(targetCtClass==null || clazz == null)
+        if(targetClass==null || clazz == null)
             throw new CreateAopProxyException("Create Class is Null");
-        CtField[] targetCtFields = targetCtClass.getFields();
-        CtMethod[] targetCtMethods = targetCtClass.getMethods();
-        
-        return null;
+        CtClass proxyClass = CLASS_POOL.makeClass(targetClass.getName()+CLASSNAME_SUFFIX,targetClass);
+        CtField[] targetCtFields = targetClass.getFields();
+        CtMethod[] targetCtMethods = targetClass.getMethods();
+
+        try {
+            return proxyClass.toClass();
+        } catch (CannotCompileException e) {
+            logger.error(String.format("ToClass Error %s",e.getMessage()),e);
+        }
+        return clazz;
     }
     
     
