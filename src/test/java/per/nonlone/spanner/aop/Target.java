@@ -20,10 +20,11 @@ public class Target {
 
     private void methodC(){
         System.out.println("this is private method C");
+        methodG();
     }
 
     public static void methodD(){
-        System.out.println("this is static method D");
+        System.out.println("this is public static method D");
     }
 
     public void methodE(){
@@ -32,6 +33,10 @@ public class Target {
 
     protected void methodF(){
         System.out.println("This is a protected method F call by inner method");
+    }
+
+    private static void methodG(){
+        System.out.println("This is a private static method G call by inner method");
     }
 
 }
