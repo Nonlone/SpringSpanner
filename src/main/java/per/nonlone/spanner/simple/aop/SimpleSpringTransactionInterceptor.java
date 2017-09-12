@@ -19,7 +19,7 @@ public class SimpleSpringTransactionInterceptor implements MethodInterceptor {
 
 	private final static Logger logger = Logger.getLogger(SimpleSpringTransactionInterceptor.class);
 	
-	@Autowired
+//	@Autowired
 	private NutzTransDataSource dataSource;
 
 	public void filter(InterceptorChain chain) throws Throwable {
