@@ -7,9 +7,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import per.nonlone.spanner.simple.model.TestModel;
 import per.nonlone.spanner.simple.service.SimpleNutzService;
 import per.nonlone.spanner.simple.service.SimpleSpringService;
 
@@ -111,5 +113,10 @@ public class SimpleSpringController {
                 RandomStringUtils.randomAlphanumeric(4),
                 RandomStringUtils.randomAlphanumeric(4)
 	    };
+	}
+
+	@Transactional
+	protected List<TestModel> nutzInsert(String... value){
+		return simpleNutzSerivce.insertTestModel(value);
 	}
 }

@@ -27,7 +27,7 @@ public class SimpleSpringService {
 	private TestModelDao testModelDao;
 	
 	public String process(){
-		return "this is spring service hashcode>"+hashCode();
+		return String.format("this is spring service hashcode > %s class %s",hashCode(),getClass());
 	}
 	
 	@Transactional

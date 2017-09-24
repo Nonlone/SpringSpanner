@@ -19,7 +19,7 @@ public class SimpleSpringTransactionInterceptor implements MethodInterceptor {
 
 	private final static Logger logger = Logger.getLogger(SimpleSpringTransactionInterceptor.class);
 	
-//	@Autowired
+	@Autowired
 	private NutzTransDataSource dataSource;
 
 	public void filter(InterceptorChain chain) throws Throwable {
@@ -33,6 +33,12 @@ public class SimpleSpringTransactionInterceptor implements MethodInterceptor {
 				} catch (Throwable throwable) {
 					logger.error(throwable);
 					status.setRollbackOnly();
+					try {
+						Trans.rollback();
+					} catch (Exception e) {
+						//Nutz 回滚失败
+						throw new AbortTransactionException(e);
+					}
 				} finally {
 					try {
 						Trans.close();

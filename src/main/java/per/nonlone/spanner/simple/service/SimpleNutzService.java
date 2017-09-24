@@ -25,8 +25,7 @@ public class SimpleNutzService {
 
     @Aop({"simpleInterceptor", "simpleSpringInterceptor"})
     public String process() {
-        System.out.println("this is Nutz Service hashcode>" + hashCode());
-        return "this is Nutz Service hashcode>" + hashCode();
+        return String.format("this is Nutz Service hashcode > %s class > %s", hashCode(),getClass());
     }
 
     @Aop("simpleNutTransactionInterceptor")

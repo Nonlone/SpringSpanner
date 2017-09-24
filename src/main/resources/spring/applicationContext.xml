@@ -7,12 +7,10 @@
 	  http://www.springframework.org/schema/beans/spring-beans.xsd
 	  http://www.springframework.org/schema/context 
 	  http://www.springframework.org/schema/context/spring-context.xsd
-	  http://www.springframework.org/schema/tx 
-	  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-	  http://www.springframework.org/schema/aop
-	  http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+	  http://www.springframework.org/schema/tx
+	  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-    <!--<import resource="datasource-config.xml"/>-->
+    <import resource="datasource-config.xml"/>
 
     <context:annotation-config/>
     <!-- Spring 包扫描 排除Controller注解，Controller在SpringServlet扫描-->
@@ -21,6 +19,6 @@
     </context:component-scan>
 
     <!-- 可通过注解控制事务 -->
-    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>
