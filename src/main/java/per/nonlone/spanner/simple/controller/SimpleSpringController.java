@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,12 @@ public class SimpleSpringController {
 	
 	@Lazy
 	@Autowired
-	private SimpleNutzService simpleNutzSerivce;
+	private SimpleNutzService simpleNutzService;
+
+
+	@Autowired
+	@Lazy
+	private SpringAopableSimpleNutzService springAopableSimpleNutzService;
 	
 	@RequestMapping("/spring/index")
 	@ResponseBody
@@ -34,7 +40,7 @@ public class SimpleSpringController {
 	@RequestMapping("/spring/index2")
 	@ResponseBody
 	public Object index2(){
-		return simpleNutzSerivce.process()+":"+simpleNutzSerivce.hashCode()+" , "+simpleSpringService.process() + ":"+simpleSpringService.hashCode();
+		return simpleNutzService.process()+":"+ simpleNutzService.hashCode()+" , "+simpleSpringService.process() + ":"+simpleSpringService.hashCode();
 	}
 	
 	@RequestMapping("/spring/indexArray")
@@ -115,8 +121,39 @@ public class SimpleSpringController {
 	    };
 	}
 
-	@Transactional
-	protected List<TestModel> nutzInsert(String... value){
-		return simpleNutzSerivce.insertTestModel(value);
+
+
+	@RequestMapping("/spring/insertnutz")
+	@ResponseBody
+	public Object insertNuz(){
+		return springAopableSimpleNutzService.nutzInsert(getValues());
 	}
+
+
+	@RequestMapping("/spring/insertnutz2")
+	@ResponseBody
+	public Object insertNuzWithInterrupted(){
+		return springAopableSimpleNutzService.nutzInsertWithInterrupted(getValues());
+	}
+}
+
+
+@Component
+class SpringAopableSimpleNutzService {
+
+	@Autowired
+	@Lazy
+	private SimpleNutzService simpleNutzService;
+
+
+	@Transactional
+	public List<TestModel> nutzInsert(String... value){
+		return simpleNutzService.springInsertTestModel(value);
+	}
+
+	@Transactional
+	public List<TestModel> nutzInsertWithInterrupted(String... value){
+		return simpleNutzService.springInsertTestModelInterrupted(value);
+	}
+
 }
