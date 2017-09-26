@@ -1,24 +1,21 @@
 package per.nonlone.spanner.simple.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import per.nonlone.spanner.simple.model.TestModel;
 import per.nonlone.spanner.simple.service.SimpleNutzService;
 import per.nonlone.spanner.simple.service.SimpleSpringService;
+import per.nonlone.spanner.simple.service.SpringAopableSimpleNutzService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class SimpleSpringController {
-	
+
 	@Autowired
 	private SimpleSpringService simpleSpringService;
 	
@@ -28,7 +25,6 @@ public class SimpleSpringController {
 
 
 	@Autowired
-	@Lazy
 	private SpringAopableSimpleNutzService springAopableSimpleNutzService;
 	
 	@RequestMapping("/spring/index")
@@ -135,25 +131,4 @@ public class SimpleSpringController {
 	public Object insertNuzWithInterrupted(){
 		return springAopableSimpleNutzService.nutzInsertWithInterrupted(getValues());
 	}
-}
-
-
-@Component
-class SpringAopableSimpleNutzService {
-
-	@Autowired
-	@Lazy
-	private SimpleNutzService simpleNutzService;
-
-
-	@Transactional
-	public List<TestModel> nutzInsert(String... value){
-		return simpleNutzService.springInsertTestModel(value);
-	}
-
-	@Transactional
-	public List<TestModel> nutzInsertWithInterrupted(String... value){
-		return simpleNutzService.springInsertTestModelInterrupted(value);
-	}
-
 }
