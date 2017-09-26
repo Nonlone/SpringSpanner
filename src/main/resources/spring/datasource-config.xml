@@ -46,10 +46,10 @@
         <property name="transactionManager" ref="transactionManager"/>
     </bean>
 
+    <bean id="springDaoRunner" class="org.nutz.integration.spring.SpringDaoRunner"/>
     <bean id="dao" class="org.nutz.dao.impl.NutDao">
         <property name="dataSource" ref="dataSource"/>
         <property name="runner" ref="springDaoRunner"/>
     </bean>
-    <bean id="springDaoRunner" class="org.nutz.integration.spring.SpringDaoRunner"/>
 
 </beans>
